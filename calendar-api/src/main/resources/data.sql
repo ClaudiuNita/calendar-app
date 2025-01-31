@@ -1,0 +1,12 @@
+INSERT INTO user (id, username, full_name, email) VALUES (default, 'claudiu', 'Claudiu Nita', 'claudiu.nita99@gmail.com');
+INSERT INTO user (id, username, full_name, email) VALUES (default, 'andreea', 'Andreea Ionita', 'andreea.ionita@gmail.com');
+INSERT INTO user (id, username, full_name, email) VALUES (default, 'mircea', 'Mircea Matei', 'mircea.matei@gmail.com');
+INSERT INTO calendar (id, name, created, owner_id) VALUES (default, 'Events', '2024-11-20', 1);
+INSERT INTO calendar (id, name, created, owner_id) VALUES (default, 'Tasks', '2024-11-19', 2);
+INSERT INTO calendar (id, name, created, owner_id) VALUES (default, 'People', '2024-11-21', 3);
+INSERT INTO ticket (id, name, description, type, created, owner_id, calendar_id) VALUES (default, 'task 1', 'description', 'task', null, 1, 1);
+INSERT INTO ticket (id, name, description, type, created, owner_id, calendar_id) VALUES (default, 'task 2', 'description', 'task', null, 2, 2);
+INSERT INTO ticket (id, name, description, type, created, owner_id, calendar_id) VALUES (default, 'task 3', 'description', 'task', null, 3, 3);
+INSERT INTO calendar_user (id, calendar_id, user_id) VALUES (default, 1, 2);
+INSERT INTO calendar_user (id, calendar_id, user_id) VALUES (default, 1, 3);
+INSERT INTO calendar_user (id, calendar_id, user_id) VALUES (default, 2, 3);

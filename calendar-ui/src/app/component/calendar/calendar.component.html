@@ -1,0 +1,97 @@
+<div class="app-container">
+  <header class="calendar-header mb-4 flex items-center justify-between">
+    <h2 class="text-4xl font-extrabold dark:text-gray-400">{{ this.calendar.name }}</h2>
+    <h2 class="text-4xl font-extrabold dark:text-gray-400">{{ this.currentMonth() }}</h2>
+    <div class="flex items-center gap-2 text-sm">
+      <button
+        class="bg-blue-500 hover:bg-green-700 active:bg-green-800 font-bold px-4 py-2 rounded-md text-white cursor-pointer"
+        (click)="prevMonth()"
+      >Previous Month</button>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+        (click)="this.toCurrentMonth()"
+      >Today</button>
+      <div class="flex items-center gap-1">
+         <button
+          class="bg-blue-500 hover:bg-green-700 active:bg-green-800 font-bold px-4 py-2 rounded-md text-white cursor-pointer"
+          (click)="nextMonth()"
+        >Next Month</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex">
+    <div class="calendar-container basis-2/3">
+        <div class="mt-10 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
+          @for (item of this.dayNamesFormatted; track item.dayName) {
+            <div
+              [ngClass]="[
+                item.isToday ? 'text' : 'text-tertiary',
+                item.isToday ? 'font-medium' : 'font-normal',
+              ]"
+            >
+              {{ item.dayName }}
+            </div>
+          }
+        </div>
+        <div class="calendar-grid mt-2 grid grid-cols-7 gap-1 text-sm">
+          @for (day of this.daysEnriched(); track day) {
+            <div
+              [ngClass]="[
+                'mx-auto',
+                'relative',
+                'flex',
+                'h-24',
+                'md:h-24',
+                'md:h-28',
+                'w-full',
+                'flex-col',
+                'items-center',
+                'justify-center',
+                'rounded-xl',
+                'bg-slate-50',
+                day.colStartClass,
+                day.isToday ? 'text-white' : 'text-tertiary',
+                day.isToday ? 'font-medium' : 'font-normal',
+              ]"
+            >
+              <div class="w-full flex-auto p-2">
+                @if (this.markerTpl(); as markerTpl) {
+                  <ng-container
+                    *ngTemplateOutlet="
+                      markerTpl;
+                      context: { $implicit: day.markers }
+                    "
+                  ></ng-container>
+                }
+              </div>
+              <footer
+                class="flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-sm md:absolute md:bottom-1 md:right-1 md:self-end"
+                [class.bg-primary-500]="day.isToday"
+              >
+                {{ day.day | date: 'd' }}
+              </footer>
+            </div>
+          }
+        </div>
+    </div>
+    
+    <div class="tickets-container basis-1/3 bg-slate-100 ml-2 mt-10 rounded-xl">
+      <div class="grid grid-cols-1 text-center text-xs leading-6 text-gray-500">
+        <h3 class="text-4xl font-extrabold dark:text-gray-400 mb-2">Tickets</h3>
+        <ol class="max-w-md space-y-1 text-gray-500 list-decimal list-outside dark:text-gray-400">
+          <li *ngFor="let ticket of tickets" class="relative left-7 bg-blue-200/75 hover:bg-green-400/75 rounded-md mx-2 text-left px-2 font-medium text-lg text-gray-900 dark:text-white">
+            <div class="flex justify-between">
+              <a routerLink="/ticket/{{ticket.id}}"> {{ ticket.name }} </a>
+              <button (click)="deleteTicket()">
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                  <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z" clip-rule="evenodd"/>
+                </svg>           
+              </button>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>

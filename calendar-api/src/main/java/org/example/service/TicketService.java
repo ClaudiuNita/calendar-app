@@ -4,9 +4,11 @@ import jakarta.annotation.Resource;
 import org.example.dto.TicketDto;
 import org.example.model.Calendar;
 import org.example.model.Ticket;
+import org.example.model.TicketType;
 import org.example.model.User;
 import org.example.repository.CalendarRepository;
 import org.example.repository.TicketRepository;
+import org.example.repository.TicketTypeRepository;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class TicketService {
     private UserRepository userRepository;
     @Resource
     private CalendarRepository calendarRepository;
+    @Resource
+    private TicketTypeRepository ticketTypeRepository;
 
     public List<TicketDto> getAllTickets() {
         return ticketRepository.findAll().stream().map(ticket -> new TicketDto(
@@ -78,12 +82,19 @@ public class TicketService {
                 ).collect(Collectors.toList());
     }
 
+    public List<TicketType> getTicketTypesByCalendarId(Long id) {
+        return ticketTypeRepository.findTicketTypesByCalendarId(id);
+    }
+
     public void saveTicket(TicketDto ticketDto) {
         Ticket ticket = new Ticket();
         Optional<User> userOptional = userRepository.findById(ticketDto.getOwnerId());
         Optional<Calendar> calendarOptional = calendarRepository.findById(ticketDto.getCalendarId());
 
         if (!userOptional.isPresent()) {
+            throw new NoSuchElementException();
+        }
+        if (!calendarOptional.isPresent()) {
             throw new NoSuchElementException();
         }
 
@@ -94,6 +105,21 @@ public class TicketService {
         ticket.setDateEnd(ticketDto.getDateEnd());
         ticket.setOwner(userOptional.get());
         ticket.setCalendar(calendarOptional.get());
+
+        List<TicketType> ticketTypes = ticketTypeRepository.findTicketTypesByCalendarId(ticketDto.getCalendarId());
+
+        if (ticketTypes.isEmpty()) {
+            TicketType ticketTypeTask = new TicketType("task", ticketDto.getOwnerId(), ticketDto.getCalendarId());
+            TicketType ticketTypeEvent = new TicketType("event", ticketDto.getOwnerId(), ticketDto.getCalendarId());
+            ticketTypeRepository.save(ticketTypeTask);
+            ticketTypeRepository.save(ticketTypeEvent);
+            ticketTypes = ticketTypeRepository.findTicketTypesByCalendarId(ticketDto.getCalendarId());
+        }
+
+        if (!ticketTypes.stream().anyMatch(ticketType -> ticketType.getName().equals(ticketDto.getType()))) {
+            TicketType ticketType = new TicketType(ticketDto.getType(), ticketDto.getOwnerId(), ticketDto.getCalendarId());
+            ticketTypeRepository.save(ticketType);
+        }
 
         ticketRepository.save(ticket);
     }
@@ -115,6 +141,13 @@ public class TicketService {
         ticket.setDateStart(ticketDto.getDateStart());
         ticket.setDateEnd(ticketDto.getDateEnd());
         ticket.setCalendar(calendarOptional.get());
+
+        List<TicketType> ticketTypes = ticketTypeRepository.findTicketTypesByCalendarId(ticketDto.getCalendarId());
+
+        if (!ticketTypes.stream().anyMatch(ticketType -> ticketType.getName().equals(ticketDto.getType()))) {
+            TicketType ticketType = new TicketType(ticketDto.getType(), ticketDto.getOwnerId(), ticketDto.getCalendarId());
+            ticketTypeRepository.save(ticketType);
+        }
 
         ticketRepository.save(ticket);
     }

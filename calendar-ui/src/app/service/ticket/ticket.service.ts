@@ -20,6 +20,10 @@ export class TicketService {
     return this.http.get<Ticket[]>(this.ticketUrl + "/calendar/" + id)
   }
 
+  getTicketTypesByCalendarId(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.ticketUrl + "/type/calendar/" + id)
+  }
+
   saveTicket(ticket: Ticket): Observable<Ticket> {
     return this.http.post<Ticket>(this.ticketUrl, ticket);
   }

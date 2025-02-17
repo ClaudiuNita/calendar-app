@@ -3,7 +3,7 @@ package org.example.model;
 import jakarta.persistence.*;
 
 @Entity
-public class Calendar_User {
+public class CalendarUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Datepicker } from 'flowbite';
-import type { DatepickerOptions, DatepickerInterface } from 'flowbite';
+import type { DatepickerOptions } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
 
 const $datepickerEl: HTMLInputElement = document.getElementById('start') as HTMLInputElement;
@@ -53,7 +53,8 @@ export class TicketComponent implements OnInit {
     calendarId: 1
   };
   hasId: boolean = false;
-  isRefreshed = false;
+  types: String[] = [];
+  isCustomType: boolean = false;
   
   constructor(private ticketService: TicketService,
               private router: Router,
@@ -66,9 +67,13 @@ export class TicketComponent implements OnInit {
       const id = parseInt(this.route.snapshot.paramMap.get('id')!);
       
       this.ticketService.getTicketById(id).subscribe(
-        ticket => { this.ticket = ticket }
+        ticket => this.ticket = ticket 
       )
     }
+
+    this.ticketService.getTicketTypesByCalendarId(this.ticket.calendarId).subscribe(
+      types => this.types = types.map(type => type.name).slice(2)
+    )
   }
 
   saveTicket(startDate: string, endDate: string) {
@@ -87,5 +92,9 @@ export class TicketComponent implements OnInit {
     this.ticketService.updateTicket(this.ticket).subscribe(
       () => this.router.navigateByUrl('/calendar/' + this.ticket.calendarId)
     );
+  }
+
+  toggleCustomType() {
+    this.isCustomType = !this.isCustomType;
   }
 }

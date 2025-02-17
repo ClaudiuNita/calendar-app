@@ -2,6 +2,7 @@ package org.example.controller;
 
 import jakarta.annotation.Resource;
 import org.example.dto.TicketDto;
+import org.example.model.TicketType;
 import org.example.service.TicketService;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,11 @@ public class TicketController {
     @GetMapping("/calendar/{id}")
     private List<TicketDto> getTicketsByCalendarId(@PathVariable Long id) {
         return ticketService.getTicketsByCalendarId(id);
+    }
+
+    @GetMapping("/type/calendar/{id}")
+    private List<TicketType> getTicketTypesByCalendarId(@PathVariable Long id) {
+        return ticketService.getTicketTypesByCalendarId(id);
     }
 
     @PostMapping

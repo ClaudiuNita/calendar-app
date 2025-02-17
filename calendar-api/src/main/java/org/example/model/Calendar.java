@@ -21,7 +21,7 @@ public class Calendar {
     private List<Ticket> tickets;
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.REMOVE)
-    private List<Calendar_User> sharedUsers;
+    private List<CalendarUser> sharedUsers;
 
     public Calendar() {
         this.created = LocalDateTime.now();

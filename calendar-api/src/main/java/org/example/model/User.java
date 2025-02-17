@@ -21,7 +21,7 @@ public class User {
     private List<Calendar> calendars;
 
     @OneToMany(mappedBy = "user")
-    private List<Calendar_User> sharedCalendar;
+    private List<CalendarUser> sharedCalendar;
 
     public User() {
     }

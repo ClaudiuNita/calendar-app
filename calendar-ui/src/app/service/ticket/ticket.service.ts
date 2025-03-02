@@ -31,4 +31,8 @@ export class TicketService {
   updateTicket(ticket: Ticket): Observable<Ticket> {
     return this.http.put<Ticket>(this.ticketUrl, ticket);
   }
+
+  deleteTicket(id: number): Observable<Ticket> {
+    return this.http.delete<Ticket>(this.ticketUrl + '/' + id);
+  }
 }

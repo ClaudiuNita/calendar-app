@@ -58,10 +58,14 @@ export class CalendarComponent {
     }    
   }  
 
-  deleteTicket() {
-    console.log("deleted");
-    
+  deleteTicket(id: number) {
+    this.ticketService.deleteTicket(id).subscribe(
+      () => window.location.reload()
+    )
   }
+
+
+
 
   public markers = input<CalendarMarkerData[], CalendarMarkerData[] | null>(
     [],

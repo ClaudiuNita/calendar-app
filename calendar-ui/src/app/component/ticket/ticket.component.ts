@@ -71,6 +71,10 @@ export class TicketComponent implements OnInit {
       )
     }
 
+    if (this.route.snapshot.paramMap.has('calendarId')) {
+      this.ticket.calendarId = parseInt(this.route.snapshot.paramMap.get('calendarId')!);
+    }
+
     this.ticketService.getTicketTypesByCalendarId(this.ticket.calendarId).subscribe(
       types => this.types = types.map(type => type.name).slice(2)
     )

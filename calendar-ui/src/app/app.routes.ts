@@ -9,7 +9,7 @@ export const routes: Routes = [
     { path: 'calendar/:id', component: CalendarComponent },
     { path: 'calendar-form', component: CalendarFormComponent },
     { path: 'calendar-form/:id', component: CalendarFormComponent },
-    { path: 'ticket', component: TicketComponent },
     { path: 'ticket/:id', component: TicketComponent },
+    { path: 'ticket/calendar/:calendarId', component: TicketComponent },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];
